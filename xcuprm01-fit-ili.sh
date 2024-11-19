@@ -336,7 +336,7 @@ function unmount_filesystem()
 #  @fn        display_package_information()
 #  @brief     Displays information about packages from the custom YUM repository.
 ##
-display_package_information()
+function display_package_information()
 {
     # Log message about displaying package information from the ukol repository
     log_debug_message "Displaying package information from the ukol repository."
