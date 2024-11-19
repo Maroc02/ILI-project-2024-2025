@@ -65,8 +65,8 @@ declare loopDevice
 ##
 function log_debug_message()
 {
-	echo "${logIndex}) $1"
-	logIndex=$((logIndex + 1))
+    echo "${logIndex}) $1"
+    logIndex=$((logIndex + 1))
 }
 
 ##
@@ -79,14 +79,14 @@ function log_debug_message()
 function log_action_result()
 {
     # Check if the previous command was successful
-	if [[ "$1" -eq "${EXIT_SUCCESS}" ]]; then
+    if [[ "$1" -eq "${EXIT_SUCCESS}" ]]; then
         # Log success message
-		echo "SUCCESS: $2"
-	else 
+	echo "SUCCESS: $2"
+    else 
         # Log error message and exit with failure code
-		echo "ERROR: $3"
-		exit "${EXIT_FAILURE}"
-	fi
+	echo "ERROR: $3"
+	exit "${EXIT_FAILURE}"
+    fi
 
     # Print an empty line for better readability in the logs
     echo
