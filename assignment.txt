@@ -2,14 +2,17 @@ Mid-semester assignment (20 points)
 
 Instructions for submission
 ● Your final solution has to be uploaded to the FIT system in a file named xloginXX-fit-ili.sh
-● Script must run on a clean, default installation of Fedora Server. Install any required RPMs not present after default installation at the beginning of your script so it can run properly.
+● Script must run on a clean, default installation of Fedora Server. Install any required RPMs not present after default installation
+  at the beginning of your script so it can run properly.
 ● Script must be written in Bash and have right end of lines format.
-● During evaluation of your solution script will be executed under root user without any additional command line options. (You can implement your own command line options, but they won’t be used during evaluation of the 10 requirements.)
+● During evaluation of your solution script will be executed under root user without any additional command line options. (You
+  can implement your own command line options, but they won’t be used during evaluation of the 10 requirements.)
 ● Script must log (e.g. using command echo) a simple description of actions for the 10 requirements to a standard output, for
-example:
-    ○ 1) Creating 4 loop devices
-      .. creating file number 3
-● Script does not have to clean-up after itself, but it is recommended to use a snapshotting in your virtual machine to have a clean environment for consecutive executions of your script.
+  example:
+      ○ 1) Creating 4 loop devices
+        .. creating file number 3
+● Script does not have to clean-up after itself, but it is recommended to use a snapshotting in your virtual machine to have a clean
+  environment for consecutive executions of your script.
 
 Prepare an executable Bash script performing the following requirements:
 1) Vytvořte 200 MB soubor /var/tmp/ukol.img. (1b)
@@ -25,4 +28,5 @@ Prepare an executable Bash script performing the following requirements:
 10) Vypište dostupné yum repozitáře, abyste ověřili, že repozitář "ukol" je dostupný. (2b)
 11) Proveďte odpojení (unmount) filesystemu připojeného do /var/www/html/ukol (1b)
 12) Následně ve skriptu spusťte příkaz “mount -a” a ověřte, že filesystem na loop device je připojen do /var/www/html/ukol. (2b)
-13) Pomocí příkazu yum vypište informace (info) o dostupných balíčcích, přičemž při volání příkazu yum zakažte všechny repozitáře kromě repozitáře "ukol". (2b)
+13) Pomocí příkazu yum vypište informace (info) o dostupných balíčcích, přičemž při volání příkazu yum zakažte všechny
+repozitáře kromě repozitáře "ukol". (2b)
