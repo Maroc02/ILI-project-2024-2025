@@ -128,20 +128,20 @@ function install_essential_packages()
 function create_loop_device()
 {
     # Create a file of the specified size
-	log_debug_message "Creating file ${FILE_PATH} of size ${FILE_BLOCK_COUNT}"
-	dd if=/dev/zero of="${FILE_PATH}" bs=1M count="${FILE_BLOCK_COUNT}"
+    log_debug_message "Creating file ${FILE_PATH} of size ${FILE_BLOCK_COUNT}"
+    dd if=/dev/zero of="${FILE_PATH}" bs=1M count="${FILE_BLOCK_COUNT}"
 
     # Log the result of the file creation (success or failure)
-	log_action_result "$?" \
+    log_action_result "$?" \
         "Created file ${FILE_PATH} of size ${FILE_BLOCK_COUNT}" \
         "Failed to create file ${FILE_PATH} of size ${FILE_BLOCK_COUNT}"
 
     # Create a loop device from the file
-	log_debug_message "Creating loop device at first unused device"
-	loopDevice=$(losetup --find --show "${FILE_PATH}")
+    log_debug_message "Creating loop device at first unused device"
+    loopDevice=$(losetup --find --show "${FILE_PATH}")
 
     # Log the result of the loop device creation (success or failure)
-	log_action_result "$?" \
+    log_action_result "$?" \
         "Created loop device at ${loopDevice}" \
         "Failed to create loop device at ${loopDevice}"
 }
@@ -157,40 +157,40 @@ function create_loop_device()
 function create_file_system()
 {
     # Create the filesystem (ext4) on the loop device
-	log_debug_message "Creating filesystem at loop device ${loopDevice}"
-	mkfs.ext4 "${loopDevice}"
+    log_debug_message "Creating filesystem at loop device ${loopDevice}"
+    mkfs.ext4 "${loopDevice}"
 
     # Log the result of the filesystem creation (success or failure)
-	log_action_result "$?" \
+    log_action_result "$?" \
         "Created filesystem at loop device ${loopDevice}" \
         "Failed to create filesystem at loop device ${loopDevice}"
 
     # Ensure the mount point directory exists 
-	if ! [[ -d "${MOUNT_POINT_PATH}" ]]; then
+    if ! [[ -d "${MOUNT_POINT_PATH}" ]]; then
         log_debug_message "Creating mount point directory at ${MOUNT_POINT_PATH}."
-		mkdir -p "${MOUNT_POINT_PATH}"
+	mkdir -p "${MOUNT_POINT_PATH}"
 
         # Log the result of creating the mount point directory (success or failure)
-		log_action_result "$?" \
+	log_action_result "$?" \
             "Successfully created mount point directory at ${MOUNT_POINT_PATH}." \
             "Failed to create mount point directory at ${MOUNT_POINT_PATH}."
-	fi
+    fi
 
     # Update /etc/fstab to enable automatic mounting
-	log_debug_message "Updating ${FSTAB_PATH} for automatic mounting of ${MOUNT_POINT_PATH}"
-	echo "${loopDevice} ${MOUNT_POINT_PATH} ext4 defaults 0 0" >> "${FSTAB_PATH}"
+    log_debug_message "Updating ${FSTAB_PATH} for automatic mounting of ${MOUNT_POINT_PATH}"
+    echo "${loopDevice} ${MOUNT_POINT_PATH} ext4 defaults 0 0" >> "${FSTAB_PATH}"
 
     # Log the result of the /etc/fstab update (success or failure)
-	log_action_result "$?" \
+    log_action_result "$?" \
         "Updated ${FSTAB_PATH} for automatic mounting of ${MOUNT_POINT_PATH}" \
         "Failed to update ${FSTAB_PATH} for automatic mounting of ${MOUNT_POINT_PATH}"
 
     # Mount the filesystem at the specified mount point
-	log_debug_message "Mounting filesystem at ${loopDevice} to ${MOUNT_POINT_PATH}"
-	mount "${loopDevice}" "${MOUNT_POINT_PATH}"
+    log_debug_message "Mounting filesystem at ${loopDevice} to ${MOUNT_POINT_PATH}"
+    mount "${loopDevice}" "${MOUNT_POINT_PATH}"
 
     # Log the result of mounting the filesystem (success or failure)
-	log_action_result "$?" \
+    log_action_result "$?" \
         "Mounted filesystem at ${loopDevice} to ${MOUNT_POINT_PATH}" \
         "Failed to mount filesystem at ${loopDevice} to ${MOUNT_POINT_PATH}"
 }
@@ -207,16 +207,16 @@ function create_file_system()
 function download_yum_packages()
 {
     # Iterate over each package name passed as argument
-	for package in "$@"; do
+    for package in "$@"; do
         # Use yum to download the package to the specified directory
-		log_debug_message "Downloading package ${package} with yum"
-		yum install --downloadonly --downloaddir="${MOUNT_POINT_PATH}" "${package}"
+	log_debug_message "Downloading package ${package} with yum"
+	yum install --downloadonly --downloaddir="${MOUNT_POINT_PATH}" "${package}"
 
         # Log the result of the download package
-		log_action_result "$?" \
+	log_action_result "$?" \
             "Downloaded package: ${package} with yum" \
             "Failed to download package: ${package} with yum"
-	done
+    done
 }
 
 ##
@@ -227,7 +227,7 @@ function generate_repodata()
 {
     # Generate repository metadata in the mount point directory
     log_debug_message "Generating repository metadata at ${MOUNT_POINT_PATH}"
-	createrepo "${MOUNT_POINT_PATH}"
+    createrepo "${MOUNT_POINT_PATH}"
 
     # Check if createrepo succeeded
     log_action_result "$?" \
@@ -236,7 +236,7 @@ function generate_repodata()
 
     # Restore SELinux contexts for the mount point directory
     log_debug_message "Restoring SELinux context for ${MOUNT_POINT_PATH}"
-	restorecon -Rv "${MOUNT_POINT_PATH}"
+    restorecon -Rv "${MOUNT_POINT_PATH}"
 
     # Check if restorecon succeeded
     log_action_result "$?" \
@@ -270,7 +270,7 @@ function start_apache()
 { 
     # Start the Apache HTTP server
     log_debug_message "Starting Apache HTTP server."
-	systemctl start httpd
+    systemctl start httpd
 
     # Check if Apache service started successfully
     log_action_result "$?" \
@@ -279,7 +279,7 @@ function start_apache()
 
     # Enable Apache HTTP server to start on boot
     log_debug_message "Enabling Apache HTTP server to start on boot."
-	systemctl enable httpd
+    systemctl enable httpd
 
     # Check if Apache service enabled successfully
     log_action_result "$?" \
@@ -295,7 +295,7 @@ function list_yum_repositories()
 {
     # Log message about listing the YUM repositories
     log_debug_message "Listing all available YUM repositories."
-	yum repolist
+    yum repolist
 
     # Check if the repolist command was successful
     log_action_result "$?" \
@@ -315,7 +315,7 @@ function unmount_filesystem()
 {
     # Log message about unmounting the filesystem
     log_debug_message "Unmounting filesystem at ${MOUNT_POINT_PATH}."
-	umount "${MOUNT_POINT_PATH}"
+    umount "${MOUNT_POINT_PATH}"
     
     # Check if unmounting succeeded
     log_action_result "$?" \
@@ -324,7 +324,7 @@ function unmount_filesystem()
    
     # Re-mount all entries in /etc/fstab
     log_debug_message "Re-mounting all entries from /etc/fstab."
-	mount -a
+    mount -a
 
     # Check if mounting all entries succeeded
     log_action_result "$?" \
@@ -366,16 +366,16 @@ function main()
     install_essential_packages
 
     # Create the loop device and set it up
-	create_loop_device
+    create_loop_device
 
     # Create the filesystem on the loop device
-	create_file_system
+    create_file_system
 
     # Download specified YUM packages (passed as arguments to the script)
-	download_yum_packages "$@"
+    download_yum_packages "$@"
 
     # Generate repository data for the custom YUM repository
-	generate_repodata
+    generate_repodata
 
     # Install and start Apache HTTP server
     start_apache
@@ -390,7 +390,7 @@ function main()
     display_package_information
     
     # Exit the script successfully
-	exit "${EXIT_SUCCESS}"
+    exit "${EXIT_SUCCESS}"
 }
 
 # Execute the main function with any provided arguments
